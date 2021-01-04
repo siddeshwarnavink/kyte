@@ -1,6 +1,23 @@
 {
   "name": "kyte-demo",
   "version": "1.0.0",
-  "main": "index.js",
-  "license": "MIT"
+  "main": "./dist/kyte-package.js",
+  "license": "MIT",
+  "author": {
+    "name": "Siddeshwar Navinkumar",
+    "email": "siddeshwar.work@gmail.com",
+    "url": "https://github.com/siddeshwarnavink"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.12.10",
+    "@babel/plugin-proposal-class-properties": "^7.12.1",
+    "@babel/plugin-transform-classes": "^7.12.1",
+    "@babel/preset-env": "^7.12.11",
+    "babel-loader": "^8.2.2",
+    "webpack": "^5.11.1",
+    "webpack-cli": "^4.3.0"
+  },
+  "scripts": {
+    "build": "node ./scripts/build.js"
+  }
 }
