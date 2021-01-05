@@ -1,6 +1,6 @@
 import Observable, { Observable_Events } from './Observable';
 
-import { generateId, createExtractor, htmlContains } from '../util';
+import { generateId, createExtractor, htmlContains, arrayDifference } from '../shared/utility';
 
 class Widget {
     // Value defined in the inheriting class
@@ -18,6 +18,7 @@ class Widget {
     _eventListeners = [];
     _customWidgets = [];
     _stringInterpolations = [];
+    _renderingLists = [];
 
     // Lifecycle
     mounted() { }
@@ -171,6 +172,145 @@ class Widget {
                 // For each attribute of child
                 Object.keys(childElAttributes).forEach(attrKey => {
                     const currentAttribute = childElAttributes[attrKey];
+
+                    // if the attribute is for 'loopArray'
+                    if (currentAttribute.name === 'looparray') {
+                        Promise.resolve().then(() => {
+                            // Check if it is a custom widget
+                            const isCustomWidget = Object.keys(classInst.widgets).indexOf(childEl.localName) > -1;
+                            let defaultAttrs;
+
+                            let actualArray;
+                            eval(`actualArray = ${currentAttribute.value.replace('this.', 'classInst.')}`);
+
+                            if (isCustomWidget) {
+                                const listId = generateId(16);
+                                const renderingListValue = {
+                                    currentArray: [...actualArray],
+                                    widgetRef: []
+                                };
+
+                                classInst._customWidgets.forEach(cWidget => {
+                                    // Finding the selected widget instance
+                                    if (childEl.children[0].attributes.id.value === cWidget.id) {
+                                        const widget = cWidget.instance;
+                                        const listWrapper = cWidget.widgetWrapper.parentElement;
+
+                                        defaultAttrs = { ...widget.attrs };
+
+                                        renderingListValue.listWrapper = listWrapper;
+                                        renderingListValue.listItemObject = cWidget.object;
+
+                                        actualArray.forEach((arrayEl, index) => {
+                                            if (index < 1) {
+                                                widget.$attrs.mutate({
+                                                    ...widget.attrs,
+                                                    loopItem: arrayEl,
+                                                    loopIndex: index
+                                                });
+
+                                                renderingListValue.widgetRef.push(widget);
+                                            } else {
+                                                const newListItemWidget = new cWidget.object();
+                                                newListItemWidget.attrs = {
+                                                    ...defaultAttrs,
+                                                    loopItem: arrayEl,
+                                                    loopIndex: index
+                                                }
+
+                                                const wrapper = document.createElement('kyte-container');
+                                                wrapper.setAttribute('id', 'cw_' + generateId(16));
+
+                                                newListItemWidget.mount(wrapper);
+                                                listWrapper.appendChild(wrapper);
+
+                                                renderingListValue.widgetRef.push(newListItemWidget);
+                                            }
+                                        });
+                                    }
+                                });
+
+                                classInst._renderingLists[listId] = renderingListValue;
+
+                                function updateListItem() {
+                                    const currentRenderingListData = { ...classInst._renderingLists[listId] };
+
+                                    let newArray;
+                                    eval(`newArray = [...${currentAttribute.value.replace('this.', 'classInst.')}]`);
+
+                                    if (JSON.stringify(newArray) === JSON.stringify(currentRenderingListData.currentArray)) {
+                                        return;
+                                    }
+
+                                    // Element added (or) removed
+                                    if (currentRenderingListData.currentArray.length !== newArray.length) {
+                                        const differenceArray = arrayDifference(currentRenderingListData.currentArray, newArray);
+
+                                        // new element(s) is/are added.
+                                        if (newArray.length > currentRenderingListData.currentArray.length) {
+                                            differenceArray.forEach(newArrayEl => {
+                                                const index = newArray.indexOf(newArrayEl);
+                                                const previousListItem = currentRenderingListData.listWrapper.children[index];
+
+                                                currentRenderingListData.currentArray[index] = newArrayEl;
+
+                                                const newListItemWidget = new currentRenderingListData.listItemObject();
+                                                newListItemWidget.attrs = {
+                                                    ...defaultAttrs,
+                                                    loopItem: newArrayEl,
+                                                    loopIndex: index
+                                                }
+
+                                                const wrapper = document.createElement('kyte-container');
+                                                wrapper.setAttribute('id', 'cw_' + generateId(16));
+
+                                                newListItemWidget.mount(wrapper);
+                                                currentRenderingListData.widgetRef[index] = newListItemWidget;
+                                                currentRenderingListData.listWrapper.insertBefore(wrapper, previousListItem);
+                                            });
+                                        }
+                                        // element(s) is/are deleted.
+                                        else {
+                                            differenceArray.forEach(newArrayEl => {
+                                                const index = currentRenderingListData.currentArray.indexOf(newArrayEl);
+                                                const listItemWidget = currentRenderingListData.widgetRef[index];
+
+                                                listItemWidget.unmount();
+                                                currentRenderingListData.widgetRef.splice(index, 1);
+                                            });
+                                        }
+
+                                        currentRenderingListData.widgetRef.forEach((listItemWidget, index) => {
+                                            listItemWidget.attrs.loopIndex = index;
+                                        });
+                                    }
+                                    // Update existing items
+                                    else {
+                                        newArray.forEach((arrayEl, index) => {
+                                            if (JSON.stringify(currentRenderingListData.currentArray[index]) !== JSON.stringify(arrayEl)) {
+                                                if (currentRenderingListData.widgetRef.indexOf(index) > -1) {
+                                                    currentRenderingListData.widgetRef[index].$attrs.mutate({
+                                                        ...currentRenderingListData.widgetRef[index].attrs,
+                                                        loopItem: arrayEl
+                                                    });
+                                                }
+                                            }
+                                        });
+
+                                    }
+                                    currentRenderingListData.currentArray = [...newArray];
+
+                                    classInst._renderingLists[listId] = { ...currentRenderingListData };
+                                }
+
+                                // Subscribing to state change
+                                classInst.$state.subscribe(Observable_Events.changed, updateListItem);
+
+                                // Subscribing to attrs change
+                                classInst.$attrs.subscribe(Observable_Events.changed, updateListItem);
+                            }
+                        });
+                    }
 
                     // if the attribute is for 'ref'
                     if (currentAttribute.name === 'ref') {
@@ -386,12 +526,10 @@ class Widget {
                             this.children[0].replaceWith(wrapper);
                             classInst._customWidgets.push({
                                 instance: Widget,
-                                id: wrapperId
+                                object: classInst.widgets[widgetName],
+                                id: wrapperId,
+                                widgetWrapper: wrapper
                             });
-                        }
-
-                        disconnectedCallback() {
-                            this.widget.unmount();
                         }
                     });
                 }
@@ -450,6 +588,8 @@ class Widget {
         this._eventListeners.forEach(listner => {
             listner.element.removeEventListener(listner.type, listner.onEmit);
         });
+
+        this._root.innerHTML = '';
     }
 }
 
