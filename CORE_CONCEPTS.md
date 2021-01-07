@@ -16,23 +16,7 @@ class MyWidget extends Widget {
 
 ```
 
-Now let us see the properties of a Widget.
-
-## Template
-
-Template is the basically the content of the widget that is displayed to the DOM. This is just a string. All the HTML tags are valid.
-
-```js
-import { Widget } from 'kyte-js';
-
-class App extends Widget {
-    template = `
-        <h1>Hello to Kyte.js</h1>
-    `;
-}
-```
-
-Now you can mount this as an app inorder to see the output. You can do this by using the Kyte object.
+To see the widget in action, it has to be mounted to the DOM. 
 
 ```js
 import Kyte from 'kyte-js';
@@ -40,12 +24,58 @@ import Kyte from 'kyte-js';
 // ...
 
 new Kyte({
-    mount: new App(),
+    mount: new MyWidget(),
     root: '#app'
 });
 ```
-This mounts the widget in a DOM element with ID app.
+
+Now this mounts the widget to a element with ID app, like for example
 
 ```html
 <div id="app"></div>
+```
+
+Now let us see the properties of a Widget.
+
+## State
+
+State is the internal value of the Widget which determins how the widget shoud be displayed. For example
+
+```js
+class MyWidget extends Widget {
+    state = {
+        userName: 'John doe',
+        displayInfo: false
+    }
+
+    // ...
+}
+```
+
+In this example, we can see the ```displayInfo``` is ```false```. According to this, we can manipulate the [template](#template) and show different output. We can see how that can be done in the dynamic output section.
+
+We can update the value in the state by using ```updateState``` function
+
+```js
+class MyWidget extends Widget {
+    // ...
+
+    toggleDisplay = () => {
+        this.updateState(() => {
+            this.state.displayInfo = !this.state.displayInfo;
+        });
+    }
+}
+```
+
+## Template
+
+Template is the basically the content of the widget that is displayed to the DOM. This is just a string. All the HTML tags are valid.
+
+```js
+class App extends Widget {
+    template = `
+        <h1>Hello to Kyte.js</h1>
+    `;
+}
 ```
