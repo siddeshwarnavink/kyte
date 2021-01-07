@@ -68,6 +68,30 @@ class MyWidget extends Widget {
 }
 ```
 
+## Attrs
+Attrs (or) Attributes are the data that passed from the parent component to the child component which pretty much helps in determining how the component is expected to render. These attrs can be simply passed just like a HTML attribute. For example,
+
+> **Parrent component** is simply the component which mounts the required children components on itself. We can see this in-detail on custom widgets section.
+
+```html
+<my-widget userName="John doe"></my-widget>
+<my-widget userName="Jane doe"></my-widget>
+```
+
+We can receive the value of all the attrs as ```attrs``` property in the widget.
+
+```js
+class MyWidget extends Widget {
+    // ...
+
+    logUsernameHandler = () => {
+        console.log(this.attrs.userName);
+    }
+}
+```
+
+If these things sound confusing, don't worry, It'll become more clear when it is co-related with other upcoming concepts.
+
 ## Template
 
 Template is the basically the content of the widget that is displayed to the DOM. This is just a string. All the HTML tags are valid.
