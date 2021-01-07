@@ -71,7 +71,7 @@ class MyWidget extends Widget {
 ## Attrs
 Attrs (or) Attributes are the data that passed from the parent component to the child component which pretty much helps in determining how the component is expected to render. These attrs can be simply passed just like a HTML attribute. For example,
 
-> **Parrent component** is simply the component which mounts the required children components on itself. We can see this in-detail on custom widgets section.
+> **Parrent component** is simply the component which mounts the required children components on itself. We can see this in-detail on [custom widgets](#custom-widgets) section.
 
 ```html
 <my-widget userName="John doe"></my-widget>
@@ -103,3 +103,36 @@ class App extends Widget {
     `;
 }
 ```
+
+## Custom widgets
+
+A widget can be also mounted in another widget's template. In this case, the widget which is being mounted is called as **child widget** and the widget which is mounting the child widget on itself is called a **parent widget**. In order to use a custom widget, the widget must be registered to ```widgets``` object of the component with the key as the 'tag name' and the value as the object of the widget. For example,
+
+```js
+class MyWidget extends Widget {
+    template = `
+        <p>Hello {{ this.attrs.userName }}.</p>
+    `
+}
+
+class MyParrentWidget extends Widget {
+    widgets = {
+        'user-widget': MyWidget
+    };
+
+    template = `
+        <user-widget userName="John deo"></user-widget>
+        <user-widget userName="Nathen deo"></user-widget>
+    `;
+}
+```
+
+On mounting the ```MyParrentWidget``` to the DOM, we get the following output.
+
+```
+Hello John deo.
+
+Hello Nathen deo.
+```
+
+Now, this may give a clear idea that how powerful the widgets are and clearly makes them a basic building block of Kyte.js project.
