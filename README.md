@@ -55,7 +55,7 @@ import { Widget } from 'kyte-js';
 
 class App extends Widget {
     template = `
-        <p>Hello to Kyte.js</p>
+        <h1>Hello to Kyte.js</h1>
     `;
 }
 ```
