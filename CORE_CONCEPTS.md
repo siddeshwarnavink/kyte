@@ -104,6 +104,39 @@ class App extends Widget {
 }
 ```
 
+## Dynamic output
+
+### String interpolation
+String interpolation is a way to display dynamic content to the template. This mostly works with [State](#state) and [Attrs](#attrs) but it's not restricted to that.
+
+#### Syntax
+
+```
+{{ dynamic_value }}
+```
+
+#### Example
+
+```js
+class App extends Widget {
+    state = {
+        userName: "John Garrett"
+    };
+    
+    template = `
+        <p>Hello {{ this.state.userName }}</p>
+
+        <p>Now the it is {{ new Date().toDateString() }}</p>
+    `;
+}
+```
+#### Output
+```
+Hello John Garrett
+
+Now the it is Fri Jan 08 2021
+```
+
 ## Custom widgets
 
 A widget can be also mounted in another widget's template. In this case, the widget which is being mounted is called as **child widget** and the widget which is mounting the child widget on itself is called a **parent widget**. In order to use a custom widget, the widget must be registered to ```widgets``` object of the component with the key as the 'tag name' and the value as the object of the widget. For example,
