@@ -64,4 +64,4 @@ This example will render "Hello to Kyte.js".
 
 ## Contributing
 
-Contribution helps in making this library more stable. You can contribute to this library if you find any bugs or if you feel some things can be improved. But before you do so, make sure you read the [Contributing Guide](./CONTRIBUTING.md) to get a clear understanding of the project structure.
+Contribution helps in making this library more stable. You can contribute to this library if you find any bugs or if you feel some things can be improved.
