@@ -1,5 +1,5 @@
 # Kyte.js
-A Javascipt library for building Widgets.
+A Javascript library for building Widgets.
 
 [VIEW DOCUMENTATION](./CORE_CONCEPTS.md)
 
@@ -7,7 +7,7 @@ A Javascipt library for building Widgets.
 This library is not yet published in npm as it is in its early stages of development. So you need to get the project in order to work with it.
 
 #### Get the project setup
-Fist clone this repository.
+First clone this repository.
 
 ```
 git clone <repo-url>
@@ -38,7 +38,7 @@ It is the version which you can use if you have for a static HTML project (no wo
 <script src="./path/to/kyte/dist/kyte-cdn.js"></script>
 ```
 
-Now this exposes a global variable ```Kyte``` which has all the features of the library.
+Now, this exposes a global variable ```Kyte``` which has all the features of the library.
 
 ## Documentation
 
@@ -64,4 +64,4 @@ This example will render "Hello to Kyte.js".
 
 ## Contributing
 
-Contribution helps in makeing this library more stable. You can countribute to this library if you find any bugs or if you feel some things can be improved. But before you do so, make sure you read the [Contributing Guide](./CONTRIBUTING.md) to get a clear understanding of the project structure.
+Contribution helps in making this library more stable. You can contribute to this library if you find any bugs or if you feel some things can be improved. But before you do so, make sure you read the [Contributing Guide](./CONTRIBUTING.md) to get a clear understanding of the project structure.
