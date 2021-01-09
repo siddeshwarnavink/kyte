@@ -233,3 +233,48 @@ class App extends Widget {
 
 #### Output
 When you click the button, you can see the ```sayHello()``` function is being called and a Javascript alert is being displayed.
+
+## Refs
+
+Refs (or) Reference in case of custom widget, gives the Widget`s instance or in case of a native HTML element, gives the DOM reference of the element.
+
+
+#### Syntax
+
+```html
+<element ref="refName"></element>
+```
+
+You can access the array of all the refs as a property named ```ref``` of the widget where it is being used. Each ref object is just a regular Javascript object with the following properties.
+
+| Property      |   Description                                 | Datatype     |
+| ------------- | --------------------------------------------  | ------------ |
+| dom           | Reference of the DOM element                  |HTMLElement   |
+| isCustomWidget| Whether this ref is for a custom widget or not|Boolean       |
+| widget        | The current instance of the widget            |<Widget\|null>|
+
+
+#### Example
+
+```js
+class App extends Widget {
+    state = {
+        pageTitle: "Hello world"
+    }
+
+    template = `
+        <h1>{{ this.state.pageTitle }}</h1>
+        <input ref="inputRef" value="New title" />
+        <button :click={this.changeTitle}>Change title</button>
+    `;
+
+    changeTitle = () => {
+        this.updateState(() => {
+            this.state.pageTitle = this.refs.inputRef.dom.value;
+        });
+    }
+}
+```
+
+#### Output
+As we change the value in the input and click the button, we can see that the value of the title is updated to the input's value.
