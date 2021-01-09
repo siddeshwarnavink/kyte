@@ -11,10 +11,10 @@ function createExtractor([beg, end]) {
     const matcher = new RegExp(`${beg}(.*?)${end}`, 'gm');
     return function (str) {
         if (!str.match(matcher)) {
-            return []
+            return [];
         }
         return str.match(matcher);
-    }
+    };
 }
 
 
@@ -31,10 +31,10 @@ function generateId(length = 18) {
 function htmlContains(rootHtml, pieceHtml) {
     const parser = new DOMParser();
 
-    let rootDom = parser.parseFromString(rootHtml, "text/html");
+    let rootDom = parser.parseFromString(rootHtml, 'text/html');
     rootDom = rootDom.querySelector('body').children[0];
 
-    let pieceDom = parser.parseFromString(pieceHtml, "text/html");
+    let pieceDom = parser.parseFromString(pieceHtml, 'text/html');
     pieceDom = pieceDom.querySelector('body').children[0];
 
     return rootDom.querySelector(pieceDom.localName) ? true : false;

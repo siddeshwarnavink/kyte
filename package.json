@@ -14,10 +14,12 @@
     "@babel/plugin-transform-classes": "^7.12.1",
     "@babel/preset-env": "^7.12.11",
     "babel-loader": "^8.2.2",
+    "eslint": "^7.17.0",
     "webpack": "^5.11.1",
     "webpack-cli": "^4.3.0"
   },
   "scripts": {
-    "build": "node ./scripts/build.js"
+    "build": "node ./scripts/build.js",
+    "lint": "eslint src/**"
   }
 }
