@@ -3,22 +3,26 @@ import Observable, { Observable_Events } from './Observable';
 import { generateId, createExtractor, htmlContains, arrayDifference } from '../shared/utility';
 
 class Widget {
-    // Value defined in the inheriting class
-    template = '';
-    state = {};
-    attrs = {};
-    widgets = {};
-    refs = {};
 
-    // Internal Observables
-    $state;
-    $attrs;
 
-    // Internal values
-    _eventListeners = [];
-    _customWidgets = [];
-    _stringInterpolations = [];
-    _renderingLists = [];
+    constructor() {
+        // Value defined in the inheriting class
+        this.template = '';
+        this.state = {};
+        this.attrs = {};
+        this.widgets = {};
+        this.refs = {};
+
+        // Internal Observables
+        this.$state;
+        this.$attrs;
+
+        // Internal values
+        this._eventListeners = [];
+        this._customWidgets = [];
+        this._stringInterpolations = [];
+        this._renderingLists = [];
+    }
 
     // Lifecycle
     mounted() { }
@@ -100,7 +104,7 @@ class Widget {
                         // Check if the event is already registered
                         if (!classInst._eventListeners.find(event => (event.type === eventName && event.element.innerHTML.trim() === childEl.innerHTML.trim()))) {
                             // Utility function for registering an event.
-                            function addEvent(eventName, eventHandler, childEl) {
+                            const addEvent = function (eventName, eventHandler, childEl) {
                                 childEl.addEventListener(eventName, eventHandler);
 
                                 classInst._eventListeners = [
@@ -110,8 +114,8 @@ class Widget {
                                         onEmit: eventHandler,
                                         element: childEl
                                     }
-                                ]
-                            }
+                                ];
+                            };
 
                             // if the attribute is for 'Two-way binding'
                             if (eventName === 'bind') {
@@ -138,7 +142,7 @@ class Widget {
                             }
                             // Default event listener
                             else {
-                                const eventHandler = (event) => {
+                                const eventHandler = () => {
                                     const codeToRun = `${currentAttribute.value.substring(1, currentAttribute.value.length - 1).replace('this.', 'classInst.')}(event)`;
                                     eval(codeToRun);
                                 };
@@ -216,7 +220,7 @@ class Widget {
                                                     ...defaultAttrs,
                                                     loopItem: arrayEl,
                                                     loopIndex: index
-                                                }
+                                                };
 
                                                 const wrapper = document.createElement('kyte-container');
                                                 wrapper.setAttribute('id', 'cw_' + generateId(16));
@@ -232,7 +236,7 @@ class Widget {
 
                                 classInst._renderingLists[listId] = renderingListValue;
 
-                                function updateListItem() {
+                                const updateListItem = function () {
                                     const currentRenderingListData = { ...classInst._renderingLists[listId] };
 
                                     let newArray;
@@ -259,7 +263,7 @@ class Widget {
                                                     ...defaultAttrs,
                                                     loopItem: newArrayEl,
                                                     loopIndex: index
-                                                }
+                                                };
 
                                                 const wrapper = document.createElement('kyte-container');
                                                 wrapper.setAttribute('id', 'cw_' + generateId(16));
@@ -301,7 +305,7 @@ class Widget {
                                     currentRenderingListData.currentArray = [...newArray];
 
                                     classInst._renderingLists[listId] = { ...currentRenderingListData };
-                                }
+                                };
 
                                 // Subscribing to state change
                                 classInst.$state.subscribe(Observable_Events.changed, updateListItem);
@@ -321,7 +325,7 @@ class Widget {
                             classInst.refs[currentAttribute.value] = {
                                 dom: childEl,
                                 isCustomWidget: false
-                            }
+                            };
                         } else {
                             // Looping throught all the registered widgets
                             classInst._customWidgets.forEach(cWidget => {
@@ -333,7 +337,7 @@ class Widget {
                                         dom: childEl,
                                         isCustomWidget: true,
                                         widget
-                                    }
+                                    };
                                 }
                             });
                         }
@@ -366,16 +370,16 @@ class Widget {
                                     widget.attrs = newAttr;
 
 
-                                    function updateWidgetAttr() {
+                                    const updateWidgetAttr = function () {
                                         const newCode = eval(`${codeForActualValue}`.replace('classInst.attrs', 'newAttrs'));
 
                                         // Updating the widget's attr
-                                        const oldAttr = { ...widget.attrs }
+                                        const oldAttr = { ...widget.attrs };
                                         const newAttr = { ...oldAttr };
                                         newAttr[actualName] = newCode;
 
                                         widget.$attrs.mutate(newAttr);
-                                    }
+                                    };
 
                                     // Subscribing to state change
                                     classInst.$state.subscribe(Observable_Events.changed, updateWidgetAttr);
@@ -405,13 +409,13 @@ class Widget {
 
                             const innerStringInterpolation = childEl.querySelector('kyte-container[for="si"]');
 
-                            function execureDirective() {
+                            const execureDirective = function () {
                                 let isTrue;
                                 eval(`isTrue = (${currentAttribute.value.replace('this.', 'classInst.')}) ? true: false`);
 
                                 if (!isTrue) {
-                                    const replaceDummy = document.createElement('kyte-placeholder')
-                                    replaceDummy.setAttribute('id', replaceDummyId)
+                                    const replaceDummy = document.createElement('kyte-placeholder');
+                                    replaceDummy.setAttribute('id', replaceDummyId);
                                     childEl.replaceWith(replaceDummy);
                                 } else {
                                     if (document.querySelector(`kyte-placeholder[id="${replaceDummyId}"]`)) {
@@ -422,7 +426,7 @@ class Widget {
                                         }
                                     }
                                 }
-                            }
+                            };
 
                             execureDirective();
 
@@ -438,9 +442,9 @@ class Widget {
                         }
 
                         else if (actualName === 'hide') {
-                            const defaultDisplayType = childEl.style.display
+                            const defaultDisplayType = childEl.style.display;
 
-                            function execureDirective() {
+                            const execureDirective = function() {
                                 let isTrue;
                                 eval(`isTrue = (${currentAttribute.value.replace('this.', 'classInst.')}) ? true: false`);
 
@@ -449,7 +453,7 @@ class Widget {
                                 } else {
                                     childEl.style.display = defaultDisplayType;
                                 }
-                            }
+                            };
 
                             execureDirective();
 
@@ -483,7 +487,7 @@ class Widget {
         if (Object.keys(classInst.widgets).length > 0) {
             // Looping throught the custom widgets registered in the widget
             Object.keys(classInst.widgets).forEach(widgetName => {
-                if (!!!customElements.get(widgetName)) {
+                if (!customElements.get(widgetName)) {
                     // Definging the 'Web component' which mounts the custom widget
                     customElements.define(widgetName, class extends HTMLElement {
                         constructor() {
@@ -519,7 +523,7 @@ class Widget {
                                 const childContainer = document.createElement('kyte-container');
                                 childContainer.innerHTML = innetChild;
 
-                                kyteChildren.replaceWith(childContainer)
+                                kyteChildren.replaceWith(childContainer);
                             }
 
                             // Mounting the Web component to the DOM
