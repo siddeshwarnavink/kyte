@@ -107,6 +107,7 @@ class App extends Widget {
 ## Dynamic output
 
 ### String interpolation
+
 String interpolation is a way to display dynamic content to the template. This mostly works with [State](#state) and [Attrs](#attrs) but it's not restricted to that.
 
 #### Syntax
@@ -136,6 +137,39 @@ Hello John Garrett
 
 Now the it is Fri Jan 08 2021
 ```
+
+### Dynamic attrs
+
+Dynamic attrs are similar to String interpolation but except they help in passing dynamic values as an attribute to either a native HTML element or to a [custom widget](#custom-widget).
+
+#### Syntax
+
+```html
+<element [attributeName]="dynamic_value"></element>
+```
+
+#### Example
+
+```js
+class App extends Widget {
+    state = {
+        maskPassword: true
+    };
+    
+    template = `
+        <input [type]="this.state.maskPassword ? 'password' : 'text'" />
+        <button :click={this.togglePassword}>Toggle password</button>
+    `;
+
+    togglePassword = () => {
+        this.updateState(() => {
+            this.state.maskPassword = !this.state.maskPassword;
+        });
+    }
+}
+```
+#### Output
+We can see in the output that as we press the button, the input type gets toggled.
 
 ## Custom widgets
 
