@@ -278,3 +278,49 @@ class App extends Widget {
 
 #### Output
 As we change the value in the input and click the button, we can see that the value of the title is updated to the input's value.
+
+## loopArray ```EXPERIMENTAL```
+
+```loopArray``` helps to loop through an array. This can be used **only with custom widgets** to improve the better writing of code.
+
+### Syntax
+
+```html
+<loop-item-widget loopArray="arrayToList"></loop-item-widget>
+```
+
+The individual loop item widget receives two special attrs
+* **loopItem:** The value of the array of the iteration.
+* **loopIndex:** The current iteration count.
+
+### Example
+
+```js
+class TodoItem extends Widget {
+    template = `
+        <li>{{ this.attrs.loopItem }}</li>
+    `
+}
+
+class App extends Widget {
+    widgets: {
+        'todo-item': TodoItem
+    }
+
+    state = {
+        todos: [
+            'Have coffee',
+            'Learn Kyte.js'
+        ]
+    }
+
+    template = `
+        <ul>
+            <todo-item loopArray="this.state.todos"></todo-item>
+        </ul>
+    `;
+}
+```
+
+### Output
+We can see the ```todos``` array in the state is displayed as an unordered list.
