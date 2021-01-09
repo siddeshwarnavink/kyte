@@ -1,13 +1,13 @@
 export const Observable_Events = {
     changed: 'changed'
-}
+};
 
 class Observable {
-    isChannelOpen = true;
-    subscribers = [];
-
     constructor(value) {
         this.value = value;
+
+        this.isChannelOpen = true;
+        this.subscribers = [];
     }
 
     subscribe(event, callback) {
@@ -15,14 +15,14 @@ class Observable {
     }
 
     getVal() {
-        return {...this.value};
+        return { ...this.value };
     }
-    
+
     mutate(newValue) {
         if (this.isChannelOpen) {
-            let oldValue = {...this.value};
+            let oldValue = { ...this.value };
 
-            this.value = {...newValue};
+            this.value = { ...newValue };
 
             this.subscribers.forEach(subscriber => {
                 if (subscriber.event === Observable_Events.changed) {
