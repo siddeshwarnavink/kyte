@@ -168,6 +168,9 @@ class App extends Widget {
     }
 }
 ```
+
+> That **:click** attribute is an event listener which triggers the function when the given event occurs. Learn more in [Event listener](#event-listener) section.
+
 #### Output
 We can see in the output that as we press the button, the input type gets toggled.
 
@@ -203,3 +206,30 @@ Hello Nathen deo.
 ```
 
 Now, this may give a clear idea that how powerful the widgets are and clearly makes them a basic building block of Kyte.js project.
+
+## Event Listener
+
+Event listener is a reserved attribute which helps to listen to events of the DOM element or the custom widget it is being used on.
+
+#### Syntax
+
+```html
+<element :eventType="callbackFunction"></element>
+```
+
+#### Example
+
+```js
+class App extends Widget {
+    template = `
+        <button :click={this.sayHello}>Click here</button>
+    `;
+
+    sayHello() {
+        window.alert('Hello world!');
+    }
+}
+```
+
+#### Output
+When you click the button, you can see the ```sayHello()``` function is being called and a Javascript alert is being displayed.
