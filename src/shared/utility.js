@@ -1,10 +1,11 @@
 function createExtractor([beg, end]) {
     const matcher = new RegExp(`${beg}(.*?)${end}`, 'gm');
     return function (str) {
-        if (!str.match(matcher)) {
-            return [];
-        }
-        return str.match(matcher);
+        // if (!str.match(matcher)) {
+        //     return [];
+        // }
+        // return str.match(matcher);
+        return [];
     };
 }
 
