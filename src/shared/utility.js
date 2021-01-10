@@ -1,12 +1,3 @@
-function combinedHTML(html1, html2, findTerm) {
-    html1 = html1.trim();
-    html2 = html2.trim();
-
-    console.log(findTerm);
-
-    return html1;
-}
-
 function createExtractor([beg, end]) {
     const matcher = new RegExp(`${beg}(.*?)${end}`, 'gm');
     return function (str) {
@@ -73,7 +64,6 @@ function arrayDifference(a1, a2) {
 }
 
 export {
-    combinedHTML,
     createExtractor,
     generateId,
     htmlContains,
