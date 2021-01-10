@@ -1,6 +1,7 @@
+// eslint-disable-next-line no-unused-vars
 function createExtractor([beg, end]) {
-    const matcher = new RegExp(`${beg}(.*?)${end}`, 'gm');
-    return function (str) {
+    // const matcher = new RegExp(`${beg}(.*?)${end}`, 'gm');
+    return function () {
         // if (!str.match(matcher)) {
         //     return [];
         // }
