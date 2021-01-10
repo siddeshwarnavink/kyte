@@ -1,10 +1,19 @@
 import Observable, { Observable_Events } from '../Observable';
 
-function loadFeatures(widget, featureList) {
-    featureList.forEach(featureModule => {
-        const instance = new featureModule(widget);
-        instance.run();
-    });
+function loadFeatures(widget, DOMRoot, featureList) {
+    function onLoop(domEl) {
+        for (let i = 0; i < domEl.children.length; i++) {
+            const childEl = domEl.children[i];
+            const childElAttributes = { ...childEl.attributes };
+
+            featureList.forEach(featureModule => {
+                const instance = new featureModule(widget, childEl, childElAttributes);
+                instance.run();
+            });
+        }
+    }
+
+    onLoop(DOMRoot);
 }
 
 class CoreWidget {
@@ -46,11 +55,11 @@ class CoreWidget {
     }
 
     _initializePreCustomWidgetsReactivity() {
-        loadFeatures(this, this.preCustomWidgetFeatures);
+        loadFeatures(this, this._root, this.preCustomWidgetFeatures);
     }
 
     _initializePostCustomWidgetsReactivity() {
-        loadFeatures(this, this.preCustomWidgetFeatures);
+        loadFeatures(this, this._root, this.preCustomWidgetFeatures);
     }
 
     mount(root, wrapperId = null) {
