@@ -3,8 +3,6 @@ import Observable, { Observable_Events } from './Observable';
 import { generateId, createExtractor, htmlContains, arrayDifference } from '../shared/utility';
 
 class Widget {
-
-
     constructor() {
         // Value defined in the inheriting class
         this.template = '';

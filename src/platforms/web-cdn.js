@@ -1,5 +1,4 @@
-import App from '../core/App';
-import Widget from '../core/Widget';
+import { App, Widget } from './utils/alias';
 
 const Kyte = App;
 
