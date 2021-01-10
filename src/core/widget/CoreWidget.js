@@ -10,6 +10,10 @@ function loadFeatures(widget, DOMRoot, featureList) {
                 const instance = new featureModule(widget, childEl, childElAttributes);
                 instance.run();
             });
+
+            if (childEl.children.length > 0) {
+                onLoop(childEl);
+            }
         }
     }
 
