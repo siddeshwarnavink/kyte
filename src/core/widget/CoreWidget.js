@@ -1,5 +1,7 @@
 import Observable, { Observable_Events } from '../Observable';
 
+import { generateId } from '../../shared/utility';
+
 function loadFeatures(widget, DOMRoot, featureList) {
     function onLoop(domEl) {
         for (let i = 0; i < domEl.children.length; i++) {
@@ -63,7 +65,69 @@ class CoreWidget {
     }
 
     _initializePostCustomWidgetsReactivity() {
-        loadFeatures(this, this._root, this.preCustomWidgetFeatures);
+        loadFeatures(this, this._root, this.postCustomWidgetFeatures);
+    }
+
+    _mountCustomWidgets() {
+        // Instance of the widget class
+        const classInst = this;
+
+        // Check if the widget has any custom widget
+        if (Object.keys(classInst.widgets).length > 0) {
+            // Looping throught the custom widgets registered in the widget
+            Object.keys(classInst.widgets).forEach(widgetName => {
+                if (!customElements.get(widgetName)) {
+                    // Definging the 'Web component' which mounts the custom widget
+                    customElements.define(widgetName, class extends HTMLElement {
+                        constructor() {
+                            super();
+
+                            // Creating the kyte-container for easy mounting.
+                            const wrapper = document.createElement('kyte-container');
+                            const wrapperId = 'cw_' + generateId(16);
+                            const innetChild = this.innerHTML.trim();
+                            this.innerHTML = '';
+                            wrapper.setAttribute('id', wrapperId);
+                            this.appendChild(wrapper);
+
+                            // Getting the attributes of the Web component
+                            const widgetAttributes = {};
+                            for (let i = 0; i < this.attributes.length; i++) {
+                                const attribute = this.attributes[i];
+                                widgetAttributes[attribute.name] = attribute.value;
+                            }
+
+                            // Creating the actual widget
+                            const Widget = new classInst.widgets[widgetName]();
+                            this.widget = Widget;
+
+                            // Mounting the widget with its attributes
+                            Widget.$attrs = new Observable(widgetAttributes);
+                            Widget.attrs = { ...widgetAttributes };
+                            Widget.mount(wrapper, wrapperId);
+
+                            // Handling <kyte-children />
+                            const kyteChildren = wrapper.querySelector('kyte-children');
+                            if (kyteChildren) {
+                                const childContainer = document.createElement('kyte-container');
+                                childContainer.innerHTML = innetChild;
+
+                                kyteChildren.replaceWith(childContainer);
+                            }
+
+                            // Mounting the Web component to the DOM
+                            this.children[0].replaceWith(wrapper);
+                            classInst._customWidgets.push({
+                                instance: Widget,
+                                object: classInst.widgets[widgetName],
+                                id: wrapperId,
+                                widgetWrapper: wrapper
+                            });
+                        }
+                    });
+                }
+            });
+        }
     }
 
     mount(root, wrapperId = null) {

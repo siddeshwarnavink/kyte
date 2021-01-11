@@ -3,19 +3,21 @@ import { Observable_Events } from '../../Observable';
 
 class DynamicAttributes extends Feature {
     run() {
+        const widgetInst = this.widgetInst;
+
         this.forEachAttrs(currentAttribute => {
             if (currentAttribute.name.charAt(0) === '[' && currentAttribute.name.charAt(currentAttribute.name.length - 1)) {
                 // Actual argument name
                 const actualName = currentAttribute.name.substring(1, currentAttribute.name.length - 1);
                 // The code to evan() and get the value
-                const codeForActualValue = currentAttribute.value.replace('this.', 'this.widgetInst.');
+                const codeForActualValue = currentAttribute.value.replace('this.', 'widgetInst.');
                 const actualValue = eval(codeForActualValue);
 
                 // Check if it is a custom widget
-                const isCustomWidget = Object.keys(this.widgetInst.widgets).indexOf(this.childEl.localName) > -1;
+                const isCustomWidget = Object.keys(widgetInst.widgets).indexOf(this.childEl.localName) > -1;
                 if (isCustomWidget) {
                     // Looping throught all the registered widgets
-                    this.widgetInst._customWidgets.forEach(cWidget => {
+                    widgetInst._customWidgets.forEach(cWidget => {
                         // Finding the selected widget instance
                         if (this.childEl.children[0].attributes.id.value === cWidget.id) {
                             const widget = cWidget.instance;
@@ -31,7 +33,7 @@ class DynamicAttributes extends Feature {
 
 
                             const updateWidgetAttr = function () {
-                                const newCode = eval(`${codeForActualValue}`.replace('this.widgetInst.attrs', 'newAttrs'));
+                                const newCode = eval(`${codeForActualValue}`.replace('widgetInst.attrs', 'newAttrs'));
 
                                 // Updating the widget's attr
                                 const oldAttr = { ...widget.attrs };
@@ -42,10 +44,10 @@ class DynamicAttributes extends Feature {
                             };
 
                             // Subscribing to state change
-                            this.widgetInst.$state.subscribe(Observable_Events.changed, updateWidgetAttr);
+                            widgetInst.$state.subscribe(Observable_Events.changed, updateWidgetAttr);
 
                             // Subscribing to attrs change
-                            this.widgetInst.$attrs.subscribe(Observable_Events.changed, updateWidgetAttr);
+                            widgetInst.$attrs.subscribe(Observable_Events.changed, updateWidgetAttr);
                         }
                     });
                 }

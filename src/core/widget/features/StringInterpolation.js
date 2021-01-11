@@ -5,10 +5,12 @@ import { createExtractor, generateId } from '../../../shared/utility';
 
 class StringInterpolation extends Feature {
     run() {
+        const widgetInst = this.widgetInst;
+
         // Creating an extractor
         const stringInterpolationExtractor = createExtractor(['{{', '}}']);
         // The extracted values
-        const extracts = stringInterpolationExtractor(this.widgetInst.template);
+        const extracts = stringInterpolationExtractor(widgetInst.template);
 
         // If there are any extracts
         if (extracts.length > 0) {
@@ -17,7 +19,7 @@ class StringInterpolation extends Feature {
                 // The code to eval() to get the actual value
                 const codeToRun = extract
                     .substring(2, extract.length - 2)
-                    .replace('this.', 'this.widgetInst.')
+                    .replace('this.', 'widgetInst.')
                     .trim();
 
                 const wrapperId = 'si_' + generateId(16);
@@ -34,16 +36,16 @@ class StringInterpolation extends Feature {
                     }
                 }
 
-                this.widgetInst._stringInterpolations.push({
+                widgetInst._stringInterpolations.push({
                     id: wrapperId,
                     update
                 });
 
                 // Subscribe for the state changes
-                this.widgetInst.$state.subscribe(Observable_Events.changed, update);
+                widgetInst.$state.subscribe(Observable_Events.changed, update);
 
                 // Subscribe for the attribute changes
-                this.widgetInst.$attrs.subscribe(Observable_Events.changed, update);
+                widgetInst.$attrs.subscribe(Observable_Events.changed, update);
             });
         }
     }
