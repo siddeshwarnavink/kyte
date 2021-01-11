@@ -22,6 +22,6 @@ module.exports = {
 			'error',
 			'always'
         ],
-        'class-methods-use-this': false
+        'class-methods-use-this': 'off'
 	}
 };
