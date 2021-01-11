@@ -5,15 +5,17 @@ import { generateId, arrayDifference } from '../../../shared/utility';
 
 class LoopArray extends Feature {
     run() {
+        const widgetInst = this.widgetInst;
+
         this.forEachAttrs(currentAttribute => {
             if (currentAttribute.name === 'looparray') {
                 Promise.resolve().then(() => {
                     // Check if it is a custom widget
-                    const isCustomWidget = Object.keys(this.widgetInst.widgets).indexOf(this.childEl.localName) > -1;
+                    const isCustomWidget = Object.keys(widgetInst.widgets).indexOf(this.childEl.localName) > -1;
                     let defaultAttrs;
 
                     let actualArray;
-                    eval(`actualArray = ${currentAttribute.value.replace('this.', 'this.widgetInst.')}`);
+                    eval(`actualArray = ${currentAttribute.value.replace('this.', 'widgetInst.')}`);
 
                     if (isCustomWidget) {
                         const listId = generateId(16);
@@ -22,7 +24,7 @@ class LoopArray extends Feature {
                             widgetRef: []
                         };
 
-                        this.widgetInst._customWidgets.forEach(cWidget => {
+                        widgetInst._customWidgets.forEach(cWidget => {
                             // Finding the selected widget instance
                             if (this.childEl.children[0].attributes.id.value === cWidget.id) {
                                 const widget = cWidget.instance;
@@ -62,13 +64,13 @@ class LoopArray extends Feature {
                             }
                         });
 
-                        this.widgetInst._renderingLists[listId] = renderingListValue;
+                        widgetInst._renderingLists[listId] = renderingListValue;
 
                         const updateListItem = function () {
-                            const currentRenderingListData = { ...this.widgetInst._renderingLists[listId] };
+                            const currentRenderingListData = { ...widgetInst._renderingLists[listId] };
 
                             let newArray;
-                            eval(`newArray = [...${currentAttribute.value.replace('this.', 'this.widgetInst.')}]`);
+                            eval(`newArray = [...${currentAttribute.value.replace('this.', 'widgetInst.')}]`);
 
                             if (JSON.stringify(newArray) === JSON.stringify(currentRenderingListData.currentArray)) {
                                 return;
@@ -132,14 +134,14 @@ class LoopArray extends Feature {
                             }
                             currentRenderingListData.currentArray = [...newArray];
 
-                            this.widgetInst._renderingLists[listId] = { ...currentRenderingListData };
+                            widgetInst._renderingLists[listId] = { ...currentRenderingListData };
                         };
 
                         // Subscribing to state change
-                        this.widgetInst.$state.subscribe(Observable_Events.changed, updateListItem);
+                        widgetInst.$state.subscribe(Observable_Events.changed, updateListItem);
 
                         // Subscribing to attrs change
-                        this.widgetInst.$attrs.subscribe(Observable_Events.changed, updateListItem);
+                        widgetInst.$attrs.subscribe(Observable_Events.changed, updateListItem);
                     }
                 });
             }
