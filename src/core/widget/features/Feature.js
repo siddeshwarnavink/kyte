@@ -5,7 +5,9 @@ class Feature {
         this.childElAttributes = childElAttributes;
     }
 
-    run() { }
+    run() {
+        throw new Error('Feature should be used as parent class.')
+    }
 
     forEachAttrs(callback) {
         Object.keys(this.childElAttributes).forEach(attrKey => {
