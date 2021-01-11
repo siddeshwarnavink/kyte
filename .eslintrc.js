@@ -21,6 +21,7 @@ module.exports = {
 		'semi': [
 			'error',
 			'always'
-		]
+        ],
+        'class-methods-use-this': false
 	}
 };
