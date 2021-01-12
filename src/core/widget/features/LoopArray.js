@@ -14,7 +14,7 @@ class LoopArray extends Feature {
 
     getActualArray(currentAttribute) {
         let actualArray;
-        eval(`actualArray = ${currentAttribute.value.replace('this.', 'widgetInst.')}`);
+        eval(`actualArray = ${currentAttribute.value.replace('this.', 'this.widgetInst.')}`);
 
         return actualArray;
     }

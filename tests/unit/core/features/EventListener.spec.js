@@ -198,7 +198,7 @@ test('run shoud execute all the other functions when the event is bind', () => {
     }
     eventListner.run();
 
-    expect(functionRunCount).toBe(5);
+    expect(functionRunCount).toBe(2);
     expect(isEventListening).toBe(false);
 });
 
@@ -242,6 +242,6 @@ test('run shoud execute all the other functions when the event is not bind', () 
     }
     eventListner.run();
 
-    expect(functionRunCount).toBe(5);
+    expect(functionRunCount).toBe(2);
     expect(isEventListening).toBe(false);
 });

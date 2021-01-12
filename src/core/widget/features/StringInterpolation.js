@@ -14,19 +14,23 @@ class StringInterpolation extends Feature {
     generateCodeToRun(extract) {
         return extract
             .substring(2, extract.length - 2)
-            .replace('this.', 'widgetInst.')
+            .replace('this.', 'classInst.widgetInst.')
             .trim();
     }
 
     createKyteContaner(extract, codeToRun) {
+        const classInst = this;
+
         const wrapperId = 'si_' + generateId(16);
         const wrapper = `<kyte-container for="si" id="${wrapperId}">${eval(codeToRun)}</kyte-container>`;
 
-        this.childEl.innerHTML = this.childEl.innerHTML.replace(extract, wrapper);
+        classInst.childEl.innerHTML = this.childEl.innerHTML.replace(extract, wrapper);
         return wrapperId;
     }
 
     createSubscribeForUpdateFunction(wrapperId, codeToRun) {
+        const classInst = this;
+
         return () => {
             if (document.querySelector(`kyte-container[id="${wrapperId}"]`)) {
                 document.querySelector(`kyte-container[id="${wrapperId}"]`).innerHTML = eval(codeToRun);
@@ -35,9 +39,10 @@ class StringInterpolation extends Feature {
     }
 
     subscribeForUpdates(codeToRun, wrapperId) {
+        const classInst = this;
         const widgetInst = this.widgetInst;
 
-        const update = this.createSubscribeForUpdateFunction(wrapperId, codeToRun);
+        const update = classInst.createSubscribeForUpdateFunction(wrapperId, codeToRun);
 
         widgetInst._stringInterpolations.push({
             id: wrapperId,
@@ -57,7 +62,7 @@ class StringInterpolation extends Feature {
         this.forEachInterpolation((extract) => {
             const codeToRun = classInst.generateCodeToRun(extract);
 
-            const wrapperId = classInst.createKyteContaner(codeToRun);
+            const wrapperId = classInst.createKyteContaner(extract, codeToRun);
 
             classInst.subscribeForUpdates(codeToRun, wrapperId);
         });

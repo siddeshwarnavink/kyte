@@ -24,7 +24,7 @@ test('generateCodeForActualValue() shoud give the code for dynamicAttrs', () => 
 
     const result = dynamicAttribute.generateCodeForActualValue({ value: 'this.something' });
 
-    expect(result).toBe('widgetInst.something');
+    expect(result).toBe('classInst.widgetInst.something');
 });
 
 

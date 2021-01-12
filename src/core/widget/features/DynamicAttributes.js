@@ -11,7 +11,9 @@ class DynamicAttributes extends Feature {
     }
 
     generateCodeForActualValue(currentAttribute) {
-        return currentAttribute.value.replace('this.', 'widgetInst.');;
+        const classInst = this;
+
+        return currentAttribute.value.replace('this.', 'classInst.widgetInst.');;
     }
 
     isCustomWidget() {
@@ -34,8 +36,10 @@ class DynamicAttributes extends Feature {
     }
 
     generateUpdateWidgetAttrFunction(widget, actualName, codeForActualValue, newAttr) {
+        const classInst = this;
+
         return () => {
-            const newCode = eval(`${codeForActualValue}`.replace('widgetInst.attrs', 'newAttr'));
+            const newCode = eval(`${codeForActualValue}`.replace('classInst.widgetInst.attrs', 'newAttr'));
 
             // Updating the widget's attr
             const oldAttr = { ...widget.attrs };
@@ -47,7 +51,9 @@ class DynamicAttributes extends Feature {
     }
 
     listenForUpdateHandler(widget, actualName, codeForActualValue, newAttr) {
-        const updateWidgetAttr = this.generateUpdateWidgetAttrFunction(widget, actualName, codeForActualValue, newAttr);
+        const classInst = this;
+
+        const updateWidgetAttr = classInst.generateUpdateWidgetAttrFunction(widget, actualName, codeForActualValue, newAttr);
 
         // Subscribing to state change
         this.widgetInst.$state.subscribe(Observable_Events.changed, updateWidgetAttr);

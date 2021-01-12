@@ -17,13 +17,15 @@ class Ref extends Feature {
     }
 
     handleIfCustomWidget(currentAttribute) {
-        this.widgetInst._customWidgets.forEach(cWidget => {
+        const classInst = this;
+
+        classInst.widgetInst._customWidgets.forEach(cWidget => {
             // Finding the selected widget instance
-            if (this.childEl.children[0].attributes.id.value === cWidget.id) {
+            if (classInst.childEl.children[0].attributes.id.value === cWidget.id) {
                 const widget = cWidget.instance;
 
-                this.widgetInst.refs[currentAttribute.value] = {
-                    dom: this.childEl,
+                classInst.widgetInst.refs[currentAttribute.value] = {
+                    dom: classInst.childEl,
                     isCustomWidget: true,
                     widget
                 };

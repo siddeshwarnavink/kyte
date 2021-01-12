@@ -31,7 +31,7 @@ test('generateCodeToRun shoud generate correct code', () => {
     const result2 = stringInterpolation.generateCodeToRun(extract2);
 
     expect(result1).toBe('one');
-    expect(result2).toBe('widgetInst.state.two')
+    expect(result2).toBe('classInst.widgetInst.state.two')
 });
 
 test('createKyteContaner shoud actually create a kyte container', () => {

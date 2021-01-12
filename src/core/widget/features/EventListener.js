@@ -16,7 +16,7 @@ class EventListener extends Feature {
     }
 
     bindEventGenerateStatePieceName(currentAttribute) {
-        return currentAttribute.value.substring(1, currentAttribute.value.length - 1).replace('this.', 'this.widgetInst.');
+        return currentAttribute.value.substring(1, currentAttribute.value.length - 1).replace('this.', 'classInst.widgetInst.');
     }
 
     createAddEventFunction() {
@@ -35,37 +35,43 @@ class EventListener extends Feature {
     }
 
     createOtherEventHandlerFunction(currentAttribute) {
+        const classInst = this;
+
         return (event) => {
-            const codeToRun = `${currentAttribute.value.substring(1, currentAttribute.value.length - 1).replace('this.', 'widgetInst.')}(event)`;
+            const codeToRun = `${currentAttribute.value.substring(1, currentAttribute.value.length - 1).replace('this.', 'classInst.widgetInst.')}(event)`;
             eval(codeToRun);
         };
     }
 
     // if the attribute is for 'Two-way binding'
     bindEventHandler(addEvent, currentAttribute) {
-        if (htmlContains(this.widgetInst.template, this.childEl.outerHTML)) {
-            const statePieceName = this.bindEventGenerateStatePieceName(currentAttribute);
+        const classInst = this;
 
-            this.childEl.value = eval(statePieceName);
+        if (htmlContains(this.widgetInst.template, classInst.childEl.outerHTML)) {
+            const statePieceName = classInst.bindEventGenerateStatePieceName(currentAttribute);
+
+            classInst.childEl.value = eval(statePieceName);
 
             // istanbul ignore next
             addEvent('input', (event) => {
                 eval(`
-                 this.widgetInst.updateState(() => {
+                 classInst.widgetInst.updateState(() => {
                      ${statePieceName} = event.target.value;
                  })
              `);
 
-                this.childEl.value = event.target.value;
-            }, this.childEl);
+                classInst.childEl.value = event.target.value;
+            }, classInst.childEl);
         } else {
             return false;
         }
     }
 
     otherEventHandler(currentAttribute, eventName, addEvent) {
-        const eventHandler = this.createOtherEventHandlerFunction(currentAttribute);
-        addEvent(eventName, eventHandler, this.childEl);
+        const classInst = this;
+
+        const eventHandler = classInst.createOtherEventHandlerFunction(currentAttribute);
+        addEvent(eventName, eventHandler, classInst.childEl);
     }
 
     run() {
@@ -73,10 +79,10 @@ class EventListener extends Feature {
 
         classInst.forEachAttrs(currentAttribute => {
             // istanbul ignore next
-            if (!classInst.checkForEventListner(currentAttribute)) {
+            if (classInst.checkForEventListner(currentAttribute)) {
                 const eventName = classInst.getEventName(currentAttribute);
 
-                if (classInst.checkForEventAlreadyRegistered(eventName)) {
+                if (!classInst.checkForEventAlreadyRegistered(eventName)) {
                     const addEvent = this.createAddEventFunction();
 
                     if (eventName === 'bind') {
