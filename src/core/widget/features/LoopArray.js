@@ -4,20 +4,34 @@ import { Observable_Events } from '../../Observable';
 import { generateId, arrayDifference } from '../../../shared/utility';
 
 class LoopArray extends Feature {
+    isLoopArray(currentAttribute) {
+        return currentAttribute.name === 'looparray'
+    }
+
+    isCustomWidget() {
+        return Object.keys(this.widgetInst.widgets).indexOf(this.childEl.localName) > -1;
+    }
+
+    getActualArray(currentAttribute) {
+        let actualArray;
+        eval(`actualArray = ${currentAttribute.value.replace('this.', 'widgetInst.')}`);
+
+        return actualArray;
+    }
+
+    // istanbul ignore next
     run() {
         const widgetInst = this.widgetInst;
+        const classInst = this;
 
         this.forEachAttrs(currentAttribute => {
-            if (currentAttribute.name === 'looparray') {
+            if (classInst.isLoopArray(currentAttribute)) {
                 Promise.resolve().then(() => {
-                    // Check if it is a custom widget
-                    const isCustomWidget = Object.keys(widgetInst.widgets).indexOf(this.childEl.localName) > -1;
                     let defaultAttrs;
 
-                    let actualArray;
-                    eval(`actualArray = ${currentAttribute.value.replace('this.', 'widgetInst.')}`);
+                    const actualArray = classInst.getActualArray(currentAttribute);
 
-                    if (isCustomWidget) {
+                    if (classInst.isCustomWidget()) {
                         const listId = generateId(16);
                         const renderingListValue = {
                             currentArray: [...actualArray],

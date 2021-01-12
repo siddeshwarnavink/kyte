@@ -1,7 +1,5 @@
 import EventListener from '../../../../src/core/widget/features/EventListener';
 
-import { htmlContains } from '../../../../src/shared/utility';
-
 test('checkForEventListner should return true for correct EventListners', () => {
     const eventListner = new EventListener();
 
