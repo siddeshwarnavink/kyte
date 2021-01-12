@@ -4,12 +4,22 @@ import { Observable_Events } from '../../Observable';
 import { generateId } from '../../../shared/utility';
 
 class Directives extends Feature {
+    isDirective(currentAttribute) {
+        return currentAttribute.name.charAt(0) === ':'
+    }
+
+    extractAttributeName(currentAttribute) {
+        return currentAttribute.name.substring(1, currentAttribute.name.length)
+    }
+
+    // istanbul ignore next
     run() {
         const { widgetInst, childEl } = this;
+        const classInst = this;
 
         this.forEachAttrs(currentAttribute => {
-            if (currentAttribute.name.charAt(0) === ':') {
-                const actualName = currentAttribute.name.substring(1, currentAttribute.name.length);
+            if (classInst.isDirective(currentAttribute)) {
+                const actualName = classInst.extractAttributeName(currentAttribute);
                 childEl.removeAttribute(currentAttribute.name);
 
                 if (actualName === 'if') {
