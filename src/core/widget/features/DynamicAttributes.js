@@ -2,61 +2,87 @@ import Feature from './Feature';
 import { Observable_Events } from '../../Observable';
 
 class DynamicAttributes extends Feature {
+    isDynamicAttribute(currentAttribute) {
+        return currentAttribute.name.charAt(0) === '[' && currentAttribute.name.charAt(currentAttribute.name.length - 1) ? true : false;
+    }
+
+    extractActualAttributeName(currentAttribute) {
+        return currentAttribute.name.substring(1, currentAttribute.name.length - 1);
+    }
+
+    generateCodeForActualValue(currentAttribute) {
+        return currentAttribute.value.replace('this.', 'widgetInst.');;
+    }
+
+    isCustomWidget() {
+        return Object.keys(this.widgetInst.widgets).indexOf(this.childEl.localName) > -1;
+    }
+
+    getCurrentWidgetInstance(callback) {
+        this.widgetInst._customWidgets.forEach(cWidget => {
+            if (this.childEl.children[0].attributes.id.value === cWidget.id) {
+                const widget = cWidget.instance;
+                callback(widget);
+            }
+        });
+    }
+
+    setInitialValue(widget, actualName, actualValue, newAttr) {
+        newAttr[actualName] = actualValue;
+        widget.$attrs.mutate(newAttr);
+        widget.attrs = { ...newAttr };
+    }
+
+    generateUpdateWidgetAttrFunction(widget, actualName, codeForActualValue, newAttr) {
+        return () => {
+            const newCode = eval(`${codeForActualValue}`.replace('widgetInst.attrs', 'newAttr'));
+
+            // Updating the widget's attr
+            const oldAttr = { ...widget.attrs };
+            const newAttr = { ...oldAttr };
+            newAttr[actualName] = newCode;
+
+            widget.$attrs.mutate(newAttr);
+        }
+    }
+
+    listenForUpdateHandler(widget, actualName, codeForActualValue, newAttr) {
+        const updateWidgetAttr = this.generateUpdateWidgetAttrFunction(widget, actualName, codeForActualValue, newAttr);
+
+        // Subscribing to state change
+        this.widgetInst.$state.subscribe(Observable_Events.changed, updateWidgetAttr);
+
+        // Subscribing to attrs change
+        this.widgetInst.$attrs.subscribe(Observable_Events.changed, updateWidgetAttr);
+    }
+
+    handleNativeElementDynamicAttribute(actualName, actualValue, currentAttribute) {
+        if (actualValue) {
+            this.childEl.setAttribute(actualName, actualValue);
+            this.childEl.removeAttribute(currentAttribute.name);
+        }
+    }
+
     run() {
-        const widgetInst = this.widgetInst;
+        const classInst = this;
 
         this.forEachAttrs(currentAttribute => {
-            if (currentAttribute.name.charAt(0) === '[' && currentAttribute.name.charAt(currentAttribute.name.length - 1)) {
-                // Actual argument name
-                const actualName = currentAttribute.name.substring(1, currentAttribute.name.length - 1);
-                // The code to evan() and get the value
-                const codeForActualValue = currentAttribute.value.replace('this.', 'widgetInst.');
+            if (classInst.isDynamicAttribute(currentAttribute)) {
+                const actualName = classInst.extractActualAttributeName(currentAttribute);
+
+                const codeForActualValue = classInst.generateCodeForActualValue(currentAttribute);
                 const actualValue = eval(codeForActualValue);
 
-                // Check if it is a custom widget
-                const isCustomWidget = Object.keys(widgetInst.widgets).indexOf(this.childEl.localName) > -1;
-                if (isCustomWidget) {
-                    // Looping throught all the registered widgets
-                    widgetInst._customWidgets.forEach(cWidget => {
-                        // Finding the selected widget instance
-                        if (this.childEl.children[0].attributes.id.value === cWidget.id) {
-                            const widget = cWidget.instance;
+                if (classInst.isCustomWidget()) {
+                    classInst.getCurrentWidgetInstance(widget => {
+                        const newAttr = { ...widget.$attrs.getVal() };
 
-                            // Setting the initial value
-                            const newAttr = {
-                                ...widget.$attrs.getVal(),
-                            };
-
-                            newAttr[actualName] = actualValue;
-                            widget.$attrs.mutate(newAttr);
-                            widget.attrs = newAttr;
-
-
-                            const updateWidgetAttr = function () {
-                                const newCode = eval(`${codeForActualValue}`.replace('widgetInst.attrs', 'newAttrs'));
-
-                                // Updating the widget's attr
-                                const oldAttr = { ...widget.attrs };
-                                const newAttr = { ...oldAttr };
-                                newAttr[actualName] = newCode;
-
-                                widget.$attrs.mutate(newAttr);
-                            };
-
-                            // Subscribing to state change
-                            widgetInst.$state.subscribe(Observable_Events.changed, updateWidgetAttr);
-
-                            // Subscribing to attrs change
-                            widgetInst.$attrs.subscribe(Observable_Events.changed, updateWidgetAttr);
-                        }
+                        classInst.setInitialValue(widget, actualName, actualValue, newAttr);
+                        classInst.listenForUpdateHandler(widget, actualName, codeForActualValue, newAttr);
                     });
                 }
-                // It is a native HTML element.
                 else {
-                    if (actualValue) {
-                        this.childEl.setAttribute(actualName, actualValue);
-                        this.childEl.removeAttribute(currentAttribute.name);
-                    }
+                    classInst.handleNativeElementDynamicAttribute(actualName, actualValue, currentAttribute);
                 }
             }
         });
