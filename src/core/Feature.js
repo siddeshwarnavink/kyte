@@ -6,7 +6,7 @@ class Feature {
     }
 
     run() {
-        throw new Error('Feature should be used as parent class.')
+        throw new Error('Feature should be used as parent class.');
     }
 
     forEachAttrs(callback) {

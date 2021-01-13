@@ -1,4 +1,4 @@
-import EventListener from '../../../../src/core/widget/features/EventListener';
+import EventListener from '../../../../src/core/features/EventListener';
 
 test('checkForEventListner should return true for correct EventListners', () => {
     const eventListner = new EventListener();

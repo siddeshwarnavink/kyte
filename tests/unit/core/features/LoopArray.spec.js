@@ -1,4 +1,4 @@
-import LoopArray from "../../../../src/core/widget/features/LoopArray"
+import LoopArray from "../../../../src/core/features/LoopArray"
 
 test('isLoopArray shoud determine weather it is a loopArray or not', () => {
     const loopArray = new LoopArray();

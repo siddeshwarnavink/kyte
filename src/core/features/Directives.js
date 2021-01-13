@@ -1,15 +1,15 @@
-import Feature from './Feature';
-import { Observable_Events } from '../../Observable';
+import Feature from '../Feature';
+import { Observable_Events } from '../Observable';
 
-import { generateId } from '../../../shared/utility';
+import { generateId } from '../../shared/utility';
 
 class Directives extends Feature {
     isDirective(currentAttribute) {
-        return currentAttribute.name.charAt(0) === ':'
+        return currentAttribute.name.charAt(0) === ':';
     }
 
     extractAttributeName(currentAttribute) {
-        return currentAttribute.name.substring(1, currentAttribute.name.length)
+        return currentAttribute.name.substring(1, currentAttribute.name.length);
     }
 
     // istanbul ignore next

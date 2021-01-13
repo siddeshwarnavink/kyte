@@ -1,4 +1,4 @@
-import Feature from './Feature';
+import Feature from '../Feature';
 
 class Ref extends Feature {
     isRef(currentAttribute) {

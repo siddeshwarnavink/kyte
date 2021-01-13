@@ -1,4 +1,4 @@
-import Ref from "../../../../src/core/widget/features/Ref"
+import Ref from "../../../../src/core/features/Ref"
 
 test('isRef shoud return true if is a valid ref', () => {
     const ref = new Ref;

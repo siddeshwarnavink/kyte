@@ -1,11 +1,11 @@
-import Feature from './Feature';
-import { Observable_Events } from '../../Observable';
+import Feature from '../Feature';
+import { Observable_Events } from '../Observable';
 
-import { generateId, arrayDifference } from '../../../shared/utility';
+import { generateId, arrayDifference } from '../../shared/utility';
 
 class LoopArray extends Feature {
     isLoopArray(currentAttribute) {
-        return currentAttribute.name === 'looparray'
+        return currentAttribute.name === 'looparray';
     }
 
     isCustomWidget() {

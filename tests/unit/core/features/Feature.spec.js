@@ -1,4 +1,4 @@
-import Feature from '../../../../src/core/widget/features/Feature';
+import Feature from '../../../../src/core/Feature';
 
 test('forEachAttrs should loop through all attributes', () => {
     const feature = new Feature({ expected: 'widgetInst' }, { expected: 'childEl' }, { foo: 'bar' });

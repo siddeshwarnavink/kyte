@@ -1,4 +1,4 @@
-import StringInterpolation from '../../../../src/core/widget/features/StringInterpolation';
+import StringInterpolation from '../../../../src/core/features/StringInterpolation';
 import Observable from '../../../../src/core/Observable';
 
 test('forEachInterpolation should loop for each extract', () => {

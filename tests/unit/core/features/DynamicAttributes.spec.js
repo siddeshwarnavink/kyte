@@ -1,4 +1,4 @@
-import DynamicAttributes from '../../../../src/core/widget/features/DynamicAttributes';
+import DynamicAttributes from '../../../../src/core/features/DynamicAttributes';
 import Observable from '../../../../src/core/Observable';
 
 test('isDynamicAttribute() should return true if it is a dynamic attribute', () => {

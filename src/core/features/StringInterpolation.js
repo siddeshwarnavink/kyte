@@ -1,7 +1,7 @@
-import Feature from './Feature';
-import { Observable_Events } from '../../Observable';
+import Feature from '../Feature';
+import { Observable_Events } from '../Observable';
 
-import { createExtractor, generateId } from '../../../shared/utility';
+import { createExtractor, generateId } from '../../shared/utility';
 
 class StringInterpolation extends Feature {
     forEachInterpolation(callback) {
@@ -29,13 +29,14 @@ class StringInterpolation extends Feature {
     }
 
     createSubscribeForUpdateFunction(wrapperId, codeToRun) {
+        // eslint-disable-next-line no-unused-vars
         const classInst = this;
 
         return () => {
             if (document.querySelector(`kyte-container[id="${wrapperId}"]`)) {
                 document.querySelector(`kyte-container[id="${wrapperId}"]`).innerHTML = eval(codeToRun);
             }
-        }
+        };
     }
 
     subscribeForUpdates(codeToRun, wrapperId) {

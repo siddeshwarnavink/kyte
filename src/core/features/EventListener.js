@@ -1,6 +1,6 @@
-import Feature from './Feature';
+import Feature from '../Feature';
 
-import { htmlContains } from '../../../shared/utility';
+import { htmlContains } from '../../shared/utility';
 
 class EventListener extends Feature {
     checkForEventListner(currentAttribute) {
@@ -35,8 +35,10 @@ class EventListener extends Feature {
     }
 
     createOtherEventHandlerFunction(currentAttribute) {
+        // eslint-disable-next-line no-unused-vars
         const classInst = this;
 
+        // eslint-disable-next-line no-unused-vars
         return (event) => {
             const codeToRun = `${currentAttribute.value.substring(1, currentAttribute.value.length - 1).replace('this.', 'classInst.widgetInst.')}(event)`;
             eval(codeToRun);

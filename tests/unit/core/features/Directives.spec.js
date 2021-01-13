@@ -1,4 +1,4 @@
-import Directives from "../../../../src/core/widget/features/Directives"
+import Directives from "../../../../src/core/features/Directives"
 
 test('isDirective() shoud return true if it is a valid Directive', () => {
     const directive = new Directives;

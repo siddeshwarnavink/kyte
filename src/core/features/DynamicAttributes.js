@@ -1,5 +1,5 @@
-import Feature from './Feature';
-import { Observable_Events } from '../../Observable';
+import Feature from '../Feature';
+import { Observable_Events } from '../Observable';
 
 class DynamicAttributes extends Feature {
     isDynamicAttribute(currentAttribute) {
@@ -11,9 +11,10 @@ class DynamicAttributes extends Feature {
     }
 
     generateCodeForActualValue(currentAttribute) {
+        // eslint-disable-next-line no-unused-vars
         const classInst = this;
 
-        return currentAttribute.value.replace('this.', 'classInst.widgetInst.');;
+        return currentAttribute.value.replace('this.', 'classInst.widgetInst.');
     }
 
     isCustomWidget() {
@@ -35,11 +36,13 @@ class DynamicAttributes extends Feature {
         widget.attrs = { ...newAttr };
     }
 
-    generateUpdateWidgetAttrFunction(widget, actualName, codeForActualValue, newAttr) {
+    // eslint-disable-next-line no-unused-vars
+    generateUpdateWidgetAttrFunction(widget, actualName, codeForActualValue, _newAttr) {
+        // eslint-disable-next-line no-unused-vars
         const classInst = this;
 
         return () => {
-            const newCode = eval(`${codeForActualValue}`.replace('classInst.widgetInst.attrs', 'newAttr'));
+            const newCode = eval(`${codeForActualValue}`.replace('classInst.widgetInst.attrs', '_newAttr'));
 
             // Updating the widget's attr
             const oldAttr = { ...widget.attrs };
@@ -47,7 +50,7 @@ class DynamicAttributes extends Feature {
             newAttr[actualName] = newCode;
 
             widget.$attrs.mutate(newAttr);
-        }
+        };
     }
 
     listenForUpdateHandler(widget, actualName, codeForActualValue, newAttr) {
