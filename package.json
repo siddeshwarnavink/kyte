@@ -1,5 +1,5 @@
 {
-  "name": "kyte-demo",
+  "name": "kyte-js",
   "version": "1.0.0",
   "main": "./dist/kyte-package.js",
   "license": "MIT",
