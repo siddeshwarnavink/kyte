@@ -1,6 +1,6 @@
 # Kyte.js
 
-![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg) ![CI badge](https://github.com/siddeshwarnavink/kyte/workflows/Node%20Continuous%20Integration/badge.svg) ![PRs status](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)
+![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg) ![CI badge](https://github.com/siddeshwarnavink/kyte/workflows/CI/badge.svg) ![PRs status](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)
 
 A Javascript library for building Widgets.
 
