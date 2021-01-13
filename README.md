@@ -7,47 +7,27 @@ A Javascript library for building Widgets.
 [VIEW DOCUMENTATION](https://github.com/siddeshwarnavink/kyte/wiki/Core-concepts)
 
 ## Installation
-This library is not yet published in npm as it is in its early stages of development. So you need to get the project in order to work with it.
-
-#### Get the project setup
-First clone this repository.
+### Install as a package
+This is the recommended way to use Kyte. To install Kyte you have to install it as dependency
 
 ```
-git clone <repo-url>
+npm install --save kyte-js
 ```
 
-Then install all the dependency. Make sure you're using Node.js version mentioned in the ```.nvmrc``` file for better compatibility
-
-```
-nvm use
-yarn install
+Now you get access to Kyte.js features as follows.
+```js
+import Kyte, { Widget } from 'kyte-js';
 ```
 
-Now you can run the build script to get a compiled library code in the ```dist``` folder which you can integrate with your project.
-
-#### Option 1: Installing as dependency
-You can install the project folder as a dependency by simply running
-
-```
-yarn add file:./path/to/kyte/
-```
-
-This option can be used when you're using the library inside a workflow like Webpack.
-
-#### Option 2: Script import directly
-It is the version which you can use if you have for a static HTML project (no workflow). You can simply import the script
+#### Use the CDN
+You can simply use the CDN to get started with Kyte. Although, it is recommended to install Kyte as a package and use it in case of a real app.
 
 ```html
-<script src="./path/to/kyte/dist/kyte-cdn.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/siddeshwarnavink/kyte/dist/kyte-cdn.js"></script>
 ```
-
-Now, this exposes a global variable ```Kyte``` which has all the features of the library.
-
 ## Documentation
 
-You can simply click the link below to view the documentation.
-
-[VIEW DOCUMENTATION](https://github.com/siddeshwarnavink/kyte/wiki/Core-concepts)
+[View the documentation](https://github.com/siddeshwarnavink/kyte/wiki/Core-concepts) to know how to use kyte in your project
 
 
 ## Examples
@@ -67,4 +47,4 @@ This example will render "Hello to Kyte.js".
 
 ## Contributing
 
-Contribution helps in making this library more stable. You can contribute to this library if you find any bugs or if you feel some things can be improved.
+Contribution helps in making this library more stable. You can contribute to this library if you find any bugs or if you feel some things can be improved. But make sure that you read the [Contributing guidelines](https://github.com/siddeshwarnavink/kyte/wiki/Contributing-guidelines) first.
