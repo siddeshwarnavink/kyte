@@ -4,7 +4,7 @@
 
 A Javascript library for building Widgets.
 
-[VIEW DOCUMENTATION](./CORE_CONCEPTS.md)
+[VIEW DOCUMENTATION](https://github.com/siddeshwarnavink/kyte/wiki/Core-concepts)
 
 ## Installation
 This library is not yet published in npm as it is in its early stages of development. So you need to get the project in order to work with it.
@@ -47,7 +47,7 @@ Now, this exposes a global variable ```Kyte``` which has all the features of the
 
 You can simply click the link below to view the documentation.
 
-[VIEW DOCUMENTATION](./CORE_CONCEPTS.md)
+[VIEW DOCUMENTATION](https://github.com/siddeshwarnavink/kyte/wiki/Core-concepts)
 
 
 ## Examples
