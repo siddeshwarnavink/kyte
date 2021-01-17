@@ -9,7 +9,7 @@
     "url": "https://github.com/siddeshwarnavink"
   },
   "repository": {
-    "url": "https://github.com/siddeshwarnavink",
+    "url": "https://github.com/siddeshwarnavink/kyte",
     "type": "git"
   },
   "devDependencies": {
@@ -34,5 +34,8 @@
     "test:unit": "jest --coverage",
     "test:e2e": "cypress run",
     "cy:open": "cypress open"
+  },
+  "publishConfig": {
+      "registry": "https://npm.pkg.github.com/@siddeshwarnavink"
   }
 }
