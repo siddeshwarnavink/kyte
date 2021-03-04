@@ -156,20 +156,22 @@ class CoreWidget {
             this.onAttrsChange(oldValue, newValue);
         });
 
-        // Initial render
-        this._root.innerHTML = this.template;
+        if (!('looparray' in this.attrs)) {
+            // Initial render
+            this._root.innerHTML = this.template;
 
-        // Initialize reactivity
-        this._initializePreCustomWidgetsReactivity();
+            // Initialize reactivity
+            this._initializePreCustomWidgetsReactivity();
 
-        // Mount custom widgets
-        this._mountCustomWidgets();
+            // Mount custom widgets
+            this._mountCustomWidgets();
 
-        // Initialize reactivity
-        this._initializePostCustomWidgetsReactivity();
+            // Initialize reactivity
+            this._initializePostCustomWidgetsReactivity();
 
-        // Running the life cycle 'mounted'
-        this.mounted();
+            // Running the life cycle 'mounted'
+            this.mounted();
+        }
     }
 
     unmount() {

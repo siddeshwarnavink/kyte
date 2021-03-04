@@ -50,21 +50,24 @@ class LoopArray extends Feature {
                                 renderingListValue.listItemObject = cWidget.object;
 
                                 actualArray.forEach((arrayEl, index) => {
-                                    if (index < 1) {
-                                        widget.$attrs.mutate({
-                                            ...widget.attrs,
-                                            loopItem: arrayEl,
-                                            loopIndex: index
-                                        });
+                                    // if (index < 1) {
+                                    //     widget.$attrs.mutate({
+                                    //         ...widget.attrs,
+                                    //         loopItem: arrayEl,
+                                    //         loopIndex: index,
+                                    //     });
 
-                                        renderingListValue.widgetRef.push(widget);
-                                    } else {
+                                    //     renderingListValue.widgetRef.push(widget);
+                                    // } 
+                                    // else {
                                         const newListItemWidget = new cWidget.object();
                                         newListItemWidget.attrs = {
                                             ...defaultAttrs,
                                             loopItem: arrayEl,
                                             loopIndex: index
                                         };
+
+                                        delete newListItemWidget.attrs.looparray;
 
                                         const wrapper = document.createElement('kyte-container');
                                         wrapper.setAttribute('id', 'cw_' + generateId(16));
@@ -73,7 +76,7 @@ class LoopArray extends Feature {
                                         listWrapper.appendChild(wrapper);
 
                                         renderingListValue.widgetRef.push(newListItemWidget);
-                                    }
+                                    // }
                                 });
                             }
                         });
