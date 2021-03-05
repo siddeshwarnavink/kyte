@@ -14,7 +14,7 @@ class DynamicAttributes extends Feature {
         // eslint-disable-next-line no-unused-vars
         const classInst = this;
 
-        return currentAttribute.value.replace('this.', 'classInst.widgetInst.');
+        return currentAttribute.value.replace(/this./g, 'classInst.widgetInst.');
     }
 
     isCustomWidget() {

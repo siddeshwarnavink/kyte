@@ -30,7 +30,7 @@ class Directives extends Feature {
 
                     const execureDirective = function () {
                         let isTrue;
-                        eval(`isTrue = (${currentAttribute.value.replace('this.', 'widgetInst.')}) ? true: false`);
+                        eval(`isTrue = (${currentAttribute.value.replace(/this./g, 'widgetInst.')}) ? true: false`);
 
                         if (!isTrue) {
                             const replaceDummy = document.createElement('kyte-placeholder');
