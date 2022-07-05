@@ -1,6 +1,6 @@
 {
   "name": "kyte-js",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "./dist/kyte-package.js",
   "license": "MIT",
   "author": {
