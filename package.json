@@ -33,7 +33,8 @@
     "test": "yarn lint && yarn test:unit",
     "test:unit": "jest --coverage",
     "test:e2e": "cypress run",
-    "cy:open": "cypress open"
+    "cy:open": "cypress open",
+    "prepublish": "npm run build"
   },
   "publishConfig": {
       "registry": "https://npm.pkg.github.com/@siddeshwarnavink"
